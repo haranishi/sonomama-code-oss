@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>そのままコード</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main id="app">
+    <!-- 正常時 -->
+    <section id="view-ok" hidden>
+      <div class="qr-wrap">
+        <canvas id="qr-canvas" width="288" height="288" aria-label="このページのQRコード"></canvas>
+      </div>
+      <p class="quiet-note" id="quiet-note"></p>
+
+      <h2 class="label">このQRの中身</h2>
+      <div class="payload" id="payload" tabindex="0"></div>
+      <p class="promise">短縮なし・リダイレクトなし・通信なし</p>
+
+      <div class="warn" id="local-warn" hidden></div>
+
+      <h2 class="label">保存する</h2>
+      <div class="presets" id="presets" role="group" aria-label="保存サイズ"></div>
+      <div class="actions">
+        <button id="save-png" class="btn primary">PNGを保存</button>
+        <button id="save-svg" class="btn">SVGを保存</button>
+      </div>
+      <button id="copy-url" class="btn wide">URLをコピー</button>
+      <p class="meta" id="meta"></p>
+    </section>
+
+    <!-- 異常時 -->
+    <section id="view-error" hidden>
+      <h2 class="err-title" id="err-title"></h2>
+      <p class="err-body" id="err-body"></p>
+    </section>
+    <footer class="foot">
+      <p>QRコードは株式会社デンソーウェーブの登録商標です。本拡張は同社とは無関係です。</p>
+      <p><a id="license-link" href="#" target="_blank" rel="noopener">ライセンス情報</a></p>
+    </footer>
+  </main>
+
+  <script src="../lib/qrcode.js"></script>
+  <script src="../lib/qrcode_UTF8.js"></script>
+  <script src="../lib/core.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+/* 配色はトークンで持ち、ダークはトークンだけ差し替える */
+:root {
+  --bg: #ffffff;
+  --fg: #1a1a1a;
+  --fg-sub: #5c5c5c;
+  --line: #e2e2e2;
+  --surface: #f6f6f6;
+  --accent: #2f5d3f;
+  --accent-fg: #ffffff;
+  --warn-bg: #fff6e5;
+  --warn-fg: #6b4a00;
+  --warn-line: #e8c883;
+  /* QRは常にこの2色。テーマで反転させるとスキャン率が落ちるので固定する */
+  --qr-dark: #000000;
+  --qr-light: #ffffff;
+  --guide: #8aa294;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1e1d;
+    --fg: #eceeed;
+    --fg-sub: #a4aaa6;
+    --line: #343836;
+    --surface: #262a28;
+    --accent: #8fd6a8;
+    --accent-fg: #12261a;
+    --warn-bg: #3a2f14;
+    --warn-fg: #f0d79a;
+    --warn-line: #6e5a24;
+    --guide: #7f8f85;
+  }
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  width: 340px;
+  padding: 16px;
+  background: var(--bg);
+  color: var(--fg);
+  font: 13px/1.6 -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic UI", sans-serif;
+}
+
+/* QRは白地の上に置く。ダークテーマでも白地を保つ */
+.qr-wrap {
+  background: var(--qr-light);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  justify-content: center;
+}
+/* サイズはJSが実際の出力ピクセルに合わせて設定する（整数倍でのみ拡大＝にじまない） */
+#qr-canvas { display: block; image-rendering: pixelated; }
+
+.quiet-note { margin: 8px 0 16px; color: var(--fg-sub); font-size: 11px; text-align: center; }
+
+.label {
+  margin: 0 0 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  color: var(--fg-sub);
+}
+
+.payload {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  /* 全文を見せる。省略記号で隠すと製品の約束が消える */
+  overflow-wrap: anywhere;
+  user-select: all;
+  max-height: 88px;
+  overflow-y: auto;
+}
+.promise { margin: 6px 0 16px; font-size: 11px; color: var(--fg-sub); }
+
+.warn {
+  background: var(--warn-bg);
+  color: var(--warn-fg);
+  border: 1px solid var(--warn-line);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 11px;
+  margin: 0 0 16px;
+}
+
+.presets { display: flex; gap: 6px; margin-bottom: 8px; }
+.preset {
+  flex: 1;
+  background: var(--surface);
+  color: var(--fg);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 6px 4px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  line-height: 1.3;
+  text-align: center;
+}
+.preset[aria-pressed="true"] { border-color: var(--accent); background: var(--bg); box-shadow: inset 0 0 0 1px var(--accent); }
+.preset .p-note { display: block; color: var(--fg-sub); font-size: 10px; }
+
+.actions { display: flex; gap: 6px; margin-bottom: 6px; }
+.btn {
+  flex: 1;
+  background: var(--surface);
+  color: var(--fg);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 8px 10px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+}
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+.btn.wide { width: 100%; flex: none; }
+
+/* JS側が \n で2行に分けているので pre-line が必要 */
+.meta { margin: 12px 0 0; font-size: 10px; color: var(--fg-sub); line-height: 1.7; white-space: pre-line; }
+
+.err-title { margin: 0 0 8px; font-size: 14px; }
+.err-body { margin: 0; color: var(--fg-sub); font-size: 12px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .btn, .preset { transition: border-color .12s ease; }
+}
+
+.foot {
+  margin-top: 16px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  color: var(--fg-sub);
+  font-size: 10px;
+  line-height: 1.5;
+}
+.foot p { margin: 0 0 4px; }
+.foot a { color: var(--fg-sub); }
