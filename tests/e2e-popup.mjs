@@ -76,6 +76,28 @@ async function open(url, colorScheme = 'light') {
   check('大判のaria-pressedがtrueになる',
     (await page.getAttribute('#presets .preset >> nth=2', 'aria-pressed')) === 'true');
 
+  // キーボードでサイズを選んでも、操作位置と次のTab移動を保つ。
+  const printPreset = page.locator('#presets .preset').nth(1);
+  const largePreset = page.locator('#presets .preset').nth(2);
+  await printPreset.focus();
+  await page.keyboard.press('Enter');
+  check('Enterで選択したサイズにフォーカスが残る',
+    await printPreset.evaluate(el => el === document.activeElement));
+  await page.keyboard.press('Tab');
+  check('印刷用の次のTabは大判へ進む',
+    await largePreset.evaluate(el => el === document.activeElement));
+
+  await largePreset.focus();
+  await page.keyboard.press('Space');
+  check('Spaceで選択したサイズにフォーカスが残る',
+    await largePreset.evaluate(el => el === document.activeElement));
+  check('キーボード選択でaria-pressedも更新される',
+    await largePreset.getAttribute('aria-pressed') === 'true' &&
+    await printPreset.getAttribute('aria-pressed') === 'false');
+  await page.keyboard.press('Tab');
+  check('大判の次のTabはPNG保存へ進む',
+    await page.locator('#save-png').evaluate(el => el === document.activeElement));
+
   // ダウンロードが実際に発火するか（PNG）
   await page.click('#presets .preset >> nth=1'); // 印刷用に戻す
   const [dl] = await Promise.all([

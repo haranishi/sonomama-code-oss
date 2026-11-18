@@ -95,7 +95,9 @@ function renderPresets() {
     b.append(strong, note);
     b.addEventListener('click', () => {
       state.presetId = p.id;
-      renderPresets();
+      wrap.querySelectorAll('.preset').forEach(button => {
+        button.setAttribute('aria-pressed', String(button === b));
+      });
       renderMeta();
     });
     wrap.appendChild(b);
